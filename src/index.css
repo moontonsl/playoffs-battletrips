@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.form-input-card {
+  width: 100%;
+  margin: 0.75rem 0;
+  padding: 1rem;
+  border: 1px solid #e59639;
+  border-radius: 0.75rem;
+  background: #f9fafb;
+}
+
+@media (min-width: 640px) {
+  .form-input-card {
+    padding: 1.25rem;
+  }
+}

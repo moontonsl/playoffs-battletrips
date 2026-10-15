@@ -1,0 +1,27 @@
+.inputField {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid black;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: black;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.inputField:focus,
+.inputField:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px #facc15;
+  border-color: #facc15;
+}
+
+@media (max-width: 640px) {
+  .inputField {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
