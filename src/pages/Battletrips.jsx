@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Helmet } from 'react-helmet';
 import MLLogin from '../components/MLLogin';
 import Layout from '../components/Layout';
-import { DEFAULT_TOPICS } from '../data/defaultTopics';
 import { User, Mail, School, Hash, Globe, Phone, Calendar } from 'lucide-react';
 
 const Tooltip = ({ text }) => (
@@ -50,8 +49,6 @@ export default function Battletrips() {
     validId: '',
     community: 'MSL',
     smartSubscriber: '',
-    academicTrack: '',
-    selectedTopic: '',
     topicInterest: '',
     agreedAccuracy: false,
     agreedPrivacy: false,
@@ -61,13 +58,9 @@ export default function Battletrips() {
     joinMPLGroup: '',
   };
 
-  const [topicOptions, setTopicOptions] = useState(DEFAULT_TOPICS);
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
-  const [showTerms, setShowTerms] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
-  const topicDropdownRef = useRef(null);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [mlbbId, setMlbbId] = useState('');
   const [mlbbServer, setMlbbServer] = useState('');
@@ -78,27 +71,6 @@ export default function Battletrips() {
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [tempMlData, setTempMlData] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    fetch('/api/topics')
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setTopicOptions(data);
-        }
-      })
-      .catch(() => setTopicOptions(DEFAULT_TOPICS));
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (topicDropdownRef.current && !topicDropdownRef.current.contains(event.target)) {
-        setTopicDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const is16Plus = (birthdate) => {
     const today = new Date();
@@ -128,9 +100,7 @@ export default function Battletrips() {
     if (!mlbbServer) e.mlbbServer = 'MLBB Server verification required.';
     if (!form.community) e.community = 'Please select a community.';
     if (!form.smartSubscriber) e.smartSubscriber = 'Please select Yes or No.';
-    if (!form.academicTrack.trim()) e.academicTrack = 'Please enter your academic track or degree program.';
-    if (!form.selectedTopic) e.selectedTopic = 'Please select a topic of interest.';
-    if (!form.topicInterest.trim()) e.topicInterest = 'Please explain why this topic interests you.';
+    if (!form.topicInterest.trim()) e.topicInterest = 'Please tell us what you are most excited to see in the MPL PH Season 18 Playoffs.';
     if (!form.agreedAccuracy) e.agreedAccuracy = 'Please certify that your information is accurate and truthful.';
     if (!form.agreedPrivacy) e.agreedPrivacy = 'Please acknowledge data privacy consent.';
     if (form.likeMPLPage !== 'Yes') e.likeMPLPage = 'Please follow the page before selecting Yes.';
@@ -173,29 +143,27 @@ export default function Battletrips() {
     if (!validate()) return;
     setIsSubmitting(true);
     const GOOGLE_FORM_ACTION_URL =
-      'https://docs.google.com/forms/d/1OKWoaaGNcKeq-HxiV5UM8e6ilhDo84dkp4LlRThdg7s/formResponse';
+      'https://docs.google.com/forms/d/1LHhMQXmKHO1SaVD45ekXIX4AzSPxWRdUPALW_7K6JEY/formResponse';
     const formBody = new FormData();
-    formBody.append('entry.729291285', form.name);
-    formBody.append('entry.402538445', form.birthdate);
-    formBody.append('entry.1939203588', form.regionDropdown);
-    formBody.append('entry.262902066', form.region);
-    formBody.append('entry.1495590749', form.contact);
-    formBody.append('entry.752780621', form.facebook);
-    formBody.append('entry.1827884672', form.email);
-    formBody.append('entry.620958207', mlbbId);
-    formBody.append('entry.847940885', mlbbServer);
-    formBody.append('entry.223095383', form.validId);
-    formBody.append('entry.73129402', form.community);
-    formBody.append('entry.707751425', form.likeMPLPage);
-    formBody.append('entry.1668597456', form.likeMSLPage);
-    formBody.append('entry.2025817146', form.likeCHPage);
-    formBody.append('entry.1715367664', form.joinMPLGroup);
-    formBody.append('entry.1573792121', form.smartSubscriber);
-    formBody.append('entry.1133001918', form.academicTrack);
-    formBody.append('entry.136116163', form.selectedTopic);
-    formBody.append('entry.1783674452', form.topicInterest);
-    formBody.append('entry.1422588371', form.agreedAccuracy ? 'Yes' : 'No');
-    formBody.append('entry.1808873271', form.agreedPrivacy ? 'Yes' : 'No');
+    formBody.append('entry.2109085180', form.name);
+    formBody.append('entry.1678265871', form.birthdate);
+    formBody.append('entry.1813883881', form.regionDropdown);
+    formBody.append('entry.424046764', form.region);
+    formBody.append('entry.446654160', form.contact);
+    formBody.append('entry.1744073970', form.facebook);
+    formBody.append('entry.1303834726', form.email);
+    formBody.append('entry.1210799233', form.validId);
+    formBody.append('entry.1780020931', mlbbId);
+    formBody.append('entry.794429606', mlbbServer);
+    formBody.append('entry.1838937824', form.community);
+    formBody.append('entry.195564459', form.likeMPLPage);
+    formBody.append('entry.1684167342', form.likeMSLPage);
+    formBody.append('entry.1019749981', form.likeCHPage);
+    formBody.append('entry.700954641', form.joinMPLGroup);
+    formBody.append('entry.1511514165', form.smartSubscriber);
+    formBody.append('entry.750742434', form.topicInterest);
+    formBody.append('entry.1566056031', form.agreedAccuracy ? 'Yes' : 'No');
+    formBody.append('entry.1838258333', form.agreedPrivacy ? 'Yes' : 'No');
     try {
       await fetch(GOOGLE_FORM_ACTION_URL, { method: 'POST', body: formBody, mode: 'no-cors' });
       setShowModal(true);
@@ -319,46 +287,12 @@ export default function Battletrips() {
                 </select>
                 {errors.smartSubscriber && <p className="text-red-500 text-sm mt-2 text-center">{errors.smartSubscriber}</p>}
               </div>
-              <FormInput icon={<School size={20} />} label="Current Academic Track / Degree Program" name="academicTrack" placeholder="Enter your academic track or degree program" value={form.academicTrack} onChange={handleChange} error={errors.academicTrack} />
-              <div className="form-input-card relative" ref={topicDropdownRef}>
-                <label className="font-semibold block mb-1">Selected Topic of Interest</label>
-                <button
-                  type="button"
-                  onClick={() => setTopicDropdownOpen((prev) => !prev)}
-                  className="w-full border border-solid border-[#e59639] px-4 py-3.5 sm:py-4 rounded-md bg-white text-black flex items-center justify-between"
-                >
-                  <span>{form.selectedTopic || 'Choose your topic of interest'}</span>
-                  <span className="text-gray-500">▾</span>
-                </button>
-                {topicDropdownOpen && (
-                  <div className="absolute left-0 right-0 mt-1 max-h-60 overflow-auto rounded-xl border border-gray-200 bg-white shadow-xl z-10">
-                    {topicOptions.map((topic) => {
-                      const disabled = topic.status !== 'OPEN';
-                      return (
-                        <button key={topic.name} type="button" disabled={disabled} onClick={() => {
-                          if (disabled) return;
-                          setForm((prev) => ({ ...prev, selectedTopic: topic.name }));
-                          setErrors((prev) => ({ ...prev, selectedTopic: '' }));
-                          setTopicDropdownOpen(false);
-                        }} className={`w-full text-left px-4 py-3 flex items-center gap-2 ${disabled ? 'cursor-not-allowed bg-gray-50 text-gray-400' : 'cursor-pointer hover:bg-gray-100 text-black'}`}>
-                          <p className={topic.status === 'OPEN' ? 'text-green-600 font-semibold' : topic.status === 'FULL' ? 'text-red-600 font-semibold' : 'text-gray-500 font-semibold'}>{topic.status}</p>
-                          <p>{topic.name}</p>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-                {errors.selectedTopic && <p className="text-red-500 text-sm mt-2">{errors.selectedTopic}</p>}
-                <p className="text-gray-500 text-sm">
-                  {form.selectedTopic ? topicOptions.find((t) => t.name === form.selectedTopic)?.description : 'Select a topic to see its description.'}
-                </p>
-              </div>
               <div>
-                <label className="font-semibold mb-2 block">Why does this topic interest you? (Paragraph)</label>
-                <textarea name="topicInterest" value={form.topicInterest} onChange={handleChange} rows={5} placeholder="Tell us why this topic interests you" className="w-full border border-solid border-[#e59639] rounded-xl px-4 py-3.5 sm:py-4 bg-white text-black outline-none resize-vertical" />
+                <label className="font-semibold mb-2 block">What are you most excited to see in the MPL PH Season 18 Playoffs?</label>
+                <textarea name="topicInterest" value={form.topicInterest} onChange={handleChange} rows={5} placeholder="Share what you are most excited to see" className="w-full border border-solid border-[#e59639] rounded-xl px-4 py-3.5 sm:py-4 bg-white text-black outline-none resize-vertical" />
                 {errors.topicInterest && <p className="text-red-500 text-sm mt-2">{errors.topicInterest}</p>}
               </div>
-              <div className="border border-solid border-[#e59639] p-5 sm:p-6 rounded-xl bg-gray-200 space-y-5" style={{padding: '1.25rem', borderRadius: '0.75rem' }}>
+              <div className="border border-solid border-[#e59639] p-5 sm:p-6 rounded-xl bg-gray-200" style={{ padding: '1.25rem', borderRadius: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <div className="flex items-start gap-3">
                   <input
                     type="checkbox"
@@ -367,8 +301,7 @@ export default function Battletrips() {
                     onChange={handleChange}
                     className="mt-1 w-4 h-4 rounded border-2 border-black bg-white checked:bg-[#e59639] checked:border-[#e59639] focus:outline-none focus:ring-2 focus:ring-[#e59639]/50"
                   />
-                  <div className="flex-1 text-sm">I certify that the information I have provided is accurate and truthful, and I acknowledge that my selection is based on my stated field of interest, the topic I have described, and slot availability.</div>
-                  <button type="button" className="text-[#e59639] underline text-sm shrink-0" onClick={() => setShowTerms('accuracy')}>View details</button>
+                  <div className="flex-1 text-sm">I certify that the information I have provided is accurate and truthful, and I acknowledge that my selection is based on my stated field of interest, the topic I have described, and slot availability. Furthermore, I understand that the exact dates are not specified, and I may be awarded tickets for any playoff date from Day 1 to Day 5.</div>
                 </div>
                 {errors.agreedAccuracy && <p className="text-red-500 text-sm">{errors.agreedAccuracy}</p>}
                 <div className="flex items-start gap-3">
@@ -380,7 +313,6 @@ export default function Battletrips() {
                     className="mt-1 w-4 h-4 rounded border-2 border-black bg-white checked:bg-[#e59639] checked:border-[#e59639] focus:outline-none focus:ring-2 focus:ring-[#e59639]/50"
                   />
                   <div className="flex-1 text-sm">By ticking this box, I hereby grant my free, prior, and informed consent to MSL, CH, and MPL Philippines to collect, store, and process my personal data solely for the purpose of registration, coordination, and documentation of this event.</div>
-                  <button type="button" className="text-[#e59639] underline text-sm shrink-0" onClick={() => setShowTerms('privacy')}>View details</button>
                 </div>
                 {errors.agreedPrivacy && <p className="text-red-500 text-sm">{errors.agreedPrivacy}</p>}
               </div>
@@ -392,28 +324,6 @@ export default function Battletrips() {
           </div>
         </div>
       </Layout>
-
-      {showTerms && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-[9999]">
-          <div className="bg-white p-6 sm:p-8 rounded-2xl max-w-lg w-full text-black shadow-2xl border-2 border-[#e59639]">
-            <h2 className="text-lg font-bold mb-4">{showTerms === 'accuracy' ? 'Accuracy Certification Details' : 'Data Privacy Consent Details'}</h2>
-            <div className="text-sm text-gray-700 space-y-3 max-h-[250px] overflow-y-auto pr-2">
-              {showTerms === 'accuracy' ? (
-                <>
-                  <p>I certify that the information I have provided is accurate and truthful.</p>
-                  <p>I acknowledge that my selection is based on my stated field of interest, the topic I have described, and slot availability.</p>
-                </>
-              ) : (
-                <>
-                  <p>By ticking this box, I hereby grant my free, prior, and informed consent to MSL, CH, and MPL Philippines to collect, store, and process my personal data.</p>
-                  <p>My personal data will be used solely for registration, coordination, and documentation of this event.</p>
-                </>
-              )}
-            </div>
-            <button onClick={() => setShowTerms(null)} className="mt-6 px-5 py-2.5 rounded-lg border border-gray-300 hover:bg-gray-50">Close</button>
-          </div>
-        </div>
-      )}
 
       {showModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999] p-4" style={{padding: '1rem'}}>
